@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Menu Self</string>
+    <string name="noMenuAvailable" tools:ignore="UnusedResources">Aucun menu disponible pour le moment.</string>
+    <string name="noMenuAvailableOn" tools:ignore="UnusedResources">Aucun menu disponible</string>
+    <string name="loading">Chargement en cours…</string>
+    <string name="menu">Menu du self</string>
+    <string name="day">Jour de la semaine</string>
+    <string name="previousDay"><![CDATA[<]]></string>
+    <string name="nextDay"><![CDATA[>]]></string>
+    <string name="mainMenu">Menu Principal</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

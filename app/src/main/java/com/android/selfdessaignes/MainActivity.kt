@@ -5,11 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,25 +21,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var backButton: Button
     private lateinit var nextButton: Button
     private lateinit var openMenuButton: Button
-    private var drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+    private val appVersionName: String = BuildConfig.VERSION_NAME
+    private val appVersionCode: Int = BuildConfig.VERSION_CODE
     private val dayInWeek: List<String> = listOf("Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        findViewById<NavigationView>(R.id.nav_view).setupWithNavController(navController)
-        val appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
-        menuTextView = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.titleTextView) }!!
-        menuCurrentState = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.currentState) }!!
-        menuListView = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.menuListView) }!!
-        dayView = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.actualDay) }!!
-        backButton = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.back) }!!
-        nextButton = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.back) }!!
-        nextButton = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.next) }!!
-        openMenuButton = NavHostFragment.findNavController(navHostFragment).currentDestination?.label?.let { findViewById(R.id.mainMenu) }!!
-        drawerLayout= findViewById(R.id.drawer_layout)
+        menuTextView = findViewById(R.id.titleTextView)
+        menuCurrentState = findViewById(R.id.currentState)
+        menuListView = findViewById(R.id.menuListView)
+        dayView = findViewById(R.id.actualDay)
+        backButton = findViewById(R.id.back)
+        nextButton = findViewById(R.id.next)
+        openMenuButton = findViewById(R.id.mainMenu)
         currentDay = getDayOfWeek()
         getMenuFromWebsite(currentDay)
         backButton.setOnClickListener {
@@ -66,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+        openMenuButton
 
     }
     private fun getDayOfWeek(): String {

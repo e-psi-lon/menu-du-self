@@ -7,88 +7,92 @@
     android:background="@color/primaryColor"
     tools:ignore="Overdraw">
 
-
     <LinearLayout
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/topPanel"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/mainPage">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/header"
-            android:orientation="horizontal">
-            <TextView
-                android:id="@+id/titleTextView"
-                android:layout_width="0dp"
+            android:id="@+id/topPanel"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="7"
-                android:padding="16dp"
-                android:text="@string/menu"
-                android:textAlignment="center"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="40sp" />
-            <Button
-                android:id="@+id/mainMenu"
-                android:layout_height="match_parent"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:text="@string/mainMenu"
-                android:textColor="@android:color/transparent"
-                android:textSize="11sp"
-                android:background="@drawable/main_menu_final"/>
+                android:id="@+id/header"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/titleTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:padding="16dp"
+                    android:text="@string/menu"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="40sp" />
+                <Button
+                    android:id="@+id/mainMenu"
+                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:text="@string/mainMenu"
+                    android:textColor="@android:color/transparent"
+                    android:textSize="11sp"
+                    android:background="@drawable/main_menu_final"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/daySelection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/back_menu">
+
+                <Button
+                    android:id="@+id/back"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/previousDay"
+                    android:textSize="25sp"
+                    android:textColor="@color/buttonColor"
+                    android:background="@color/primaryColor"/>
+
+                <TextView
+                    android:id="@+id/actualDay"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:gravity="center"
+                    android:text="@string/day"
+                    android:textAlignment="center"
+                    android:textColor="@color/primaryTextColor"
+                    android:background="@color/primaryColor"
+                    android:textSize="24sp"
+                    android:paddingTop="6dp"/>
+
+                <Button
+                    android:id="@+id/next"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/primaryColor"
+                    android:text="@string/nextDay"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="25sp"/>
+
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/daySelection"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:orientation="horizontal"
-            android:background="@drawable/back_menu">
-
-            <Button
-                android:id="@+id/back"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/previousDay"
-                android:textSize="25sp"
-                android:textColor="@color/buttonColor"
-                android:background="@color/primaryColor"/>
-
-            <TextView
-                android:id="@+id/actualDay"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:text="@string/day"
-                android:textAlignment="center"
-                android:textColor="@color/primaryTextColor"
-                android:background="@color/primaryColor"
-                android:textSize="24sp"
-                android:paddingTop="6dp"/>
-
-            <Button
-                android:id="@+id/next"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/primaryColor"
-                android:text="@string/nextDay"
-                android:textColor="@color/buttonColor"
-                android:textSize="25sp"/>
+            android:id="@+id/menuPanel"
+            android:background="@color/primaryColor"
+            android:visibility="gone">
 
         </LinearLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:id="@+id/menuPanel"
-        android:background="@color/primaryColor"
-        android:visibility="gone">
-
-    </LinearLayout>
 
 
     <ListView
@@ -107,7 +111,37 @@
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/loading"
         android:textColor="@color/primaryTextColor"
-        android:textSize="50sp"
-        android:visibility="visible" />
+        android:textSize="50sp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/menu"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/switchToDinnerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="@string/dinner"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="30sp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switchToDinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="48dp"
+            android:minHeight="48dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/currentVersion"
+            android:textColor="@color/primaryTextColor"
+            android:layout_gravity="bottom"
+            android:text="@string/version"/>
+    </LinearLayout>
+
 
 </FrameLayout>

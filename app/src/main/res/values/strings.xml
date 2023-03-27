@@ -9,6 +9,6 @@
     <string name="previousDay"><![CDATA[<]]></string>
     <string name="nextDay"><![CDATA[>]]></string>
     <string name="mainMenu">Menu Principal</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dinner">Dinner</string>
+    <string name="version">Version :</string>
 </resources>

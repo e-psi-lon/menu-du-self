@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <color name="primaryColor">#151515</color>
-    <color name="primaryDarkColor" tools:keep="@color/primaryDarkColor">#050505</color>
-    <color name="primaryTextColor">#BCBCBC</color>
+    <color name="primaryColor">#23272A</color>
+    <color name="primaryDarkColor" tools:keep="@color/primaryDarkColor">#FFFFFF</color>
+    <color name="primaryTextColor">#FFFFFF</color>
     <color name="buttonColor">#9A9A9A</color>
 </resources>

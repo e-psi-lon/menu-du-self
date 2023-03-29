@@ -2,6 +2,14 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+def getGitCommitHash() {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short=8', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
 
 android {
     namespace 'com.android.selfdessaignes'
@@ -13,7 +21,7 @@ android {
         targetSdk 33
         versionCode 5
         versionName "0.5"
-
+        buildConfigField "String", "GIT_COMMIT_HASH", "\"${getGitCommitHash()}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -40,6 +48,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.14.3'
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

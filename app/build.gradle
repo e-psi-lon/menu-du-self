@@ -11,6 +11,7 @@ def getGitCommitHash() {
     return stdout.toString().trim()
 }
 
+
 android {
     namespace 'com.android.selfdessaignes'
     compileSdk 33
@@ -22,6 +23,7 @@ android {
         versionCode 5
         versionName "0.5 (${getGitCommitHash()})"
         buildConfigField "String", "GIT_COMMIT_HASH", "\"${getGitCommitHash()}\""
+        buildConfigField "String", "TOKEN_ACCESS_ACTION", "\"${System.getenv("TOKEN_ACCESS_ACTION")}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -49,6 +51,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'androidx.core:core-ktx:1.9.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

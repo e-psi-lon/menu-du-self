@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     }
     private fun checkVersion() = CoroutineScope(Dispatchers.IO).launch {
-        if (AutoUpdater.getLastCommitHash() == BuildConfig.GIT_COMMIT_HASH) {
+        if (AutoUpdater.getLastCommitHash() != BuildConfig.GIT_COMMIT_HASH) {
             AutoUpdater.GithubDialogFragment().show(supportFragmentManager, "GithubDialogFragment")
         }
     }

@@ -28,7 +28,8 @@ class AutoUpdater {
             val jsonArray = json?.let { JSONObject(it) }
             val jsonObject = jsonArray?.getJSONArray("artifacts")
             val downloadUrl = jsonObject?.getJSONObject(0)?.get("archive_download_url")
-            val token = "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"
+            val token = BuildConfig.TOKEN_ACCESS_ACTION
+            println(token)
             val request2 = Request.Builder()
                 .url(downloadUrl.toString())
                 .header("Authorization", "Bearer $token")

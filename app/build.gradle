@@ -26,11 +26,20 @@ android {
         buildConfigField "String", "TOKEN_ACCESS_ACTION", "\"${System.getenv("TOKEN_ACCESS_ACTION")}\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        WithJKS {
+            storeFile file("menu-du-self.jks")
+            storePassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
+            keyAlias "menu-du-self"
+            keyPassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.WithJKS
         }
     }
     compileOptions {

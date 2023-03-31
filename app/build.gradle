@@ -20,7 +20,7 @@ android {
         applicationId "com.android.selfdessaignes"
         minSdk 24
         targetSdk 33
-        versionCode 5
+        versionCode 6
         versionName "0.5 (${getGitCommitHash()})"
         buildConfigField "String", "GIT_COMMIT_HASH", "\"${getGitCommitHash()}\""
         buildConfigField "String", "TOKEN_ACCESS_ACTION", "\"${System.getenv("TOKEN_ACCESS_ACTION")}\""

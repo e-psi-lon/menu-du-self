@@ -77,7 +77,8 @@ class AutoUpdater {
 
         private fun unzipApp(zipFile: File)/*: File*/ {
             //val apkFile = File.createTempFile("latest-version", ".apk")
-            val apkFile = File("/storage/emulated/0/Download", "latest-version-$getLastCommitHash().apk")
+            val lastCommitHash = getLastCommitHash()
+            val apkFile = File("/storage/emulated/0/Download", "latest-version-$lastCommitHash.apk")
             println(apkFile.absolutePath)
             zipFile.inputStream().use { inputStream ->
                 ZipInputStream(inputStream).use { zipInputStream ->

@@ -1,10 +1,13 @@
 package com.android.selfdessaignes
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Intent
-import android.net.Uri
+//import android.app.PendingIntent
+//import android.content.Intent
+//import android.content.pm.PackageInstaller
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
@@ -12,9 +15,9 @@ import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
-import java.io.FileOutputStream
+//import java.io.FileInputStream
 import java.io.IOException
-import java.util.zip.ZipFile
+import java.util.zip.ZipInputStream
 
 class AutoUpdater {
     class GithubDialogFragment : DialogFragment() {
@@ -28,8 +31,7 @@ class AutoUpdater {
             val jsonArray = json?.let { JSONObject(it) }
             val jsonObject = jsonArray?.getJSONArray("artifacts")
             val downloadUrl = jsonObject?.getJSONObject(0)?.get("archive_download_url")
-            val token = BuildConfig.TOKEN_ACCESS_ACTION
-            println(token)
+            val token = "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"
             val request2 = Request.Builder()
                 .url(downloadUrl.toString())
                 .header("Authorization", "Bearer $token")
@@ -49,50 +51,59 @@ class AutoUpdater {
                 installApkFromZip(tempFile)
             }
         }
+        @SuppressLint("UnspecifiedImmutableFlag")
         private fun installApkFromZip(zipFile: File) {
-            println("installApkFromZip")
-            val apkEntryName = findApkEntryName(zipFile)
+            //val packageInstaller = requireContext().packageManager?.packageInstaller
+            //val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
+            //val sessionId = packageInstaller?.createSession(params)
+            //val session = sessionId?.let { packageInstaller.openSession(it) }
+            //val out = session?.openWrite("apk", 0, -1)
+            /*val file =*/ unzipApp(zipFile)
+            //val ins = FileInputStream(file)
+            //out?.let { ins.copyTo(it) }
+            //out?.let { session.fsync(it) }
+            //ins.close()
+            //out?.close()
+            //if (activity != null) {
+            //    val intent = Intent(activity, MainActivity::class.java)
+            //    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            //    val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            //    val statusReceiver = pendingIntent.intentSender
+            //    session?.commit(statusReceiver)
+            //}
+            //session?.close()
+            //file.delete()
+        }
 
-            ZipFile(zipFile).use { zip ->
-                val apkEntry = zip.getEntry(apkEntryName)
-
-                val apkFile = apkEntryName?.let { File(context?.cacheDir, it) }
-                FileOutputStream(apkFile).use { outputStream ->
-                    zip.getInputStream(apkEntry).use { inputStream ->
-                        inputStream.copyTo(outputStream)
+        private fun unzipApp(zipFile: File)/*: File*/ {
+            //val apkFile = File.createTempFile("latest-version", ".apk")
+            val apkFile = File(/*context?.filesDir*/"/storage/emulated/0/Download", "latest-version.apk")
+            println(apkFile.absolutePath)
+            zipFile.inputStream().use { inputStream ->
+                ZipInputStream(inputStream).use { zipInputStream ->
+                    while (true) {
+                        val entry = zipInputStream.nextEntry ?: break
+                        if (entry.name.endsWith(".apk")) {
+                            apkFile.outputStream().use { outputStream ->
+                                zipInputStream.copyTo(outputStream)
+                            }
+                            break
+                        }
                     }
                 }
-
-
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive")
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                }
-                context?.startActivity(intent)
             }
             zipFile.delete()
+            //return apkFile
+
         }
 
-        private fun findApkEntryName(zipFile: File): String? {
-            println("findApkEntryName")
-            ZipFile(zipFile).use { zip ->
-                val entries = zip.entries()
-                while (entries.hasMoreElements()) {
-                    val entry = entries.nextElement()
-                    if (entry.name.endsWith(".apk")) {
-                        return entry.name
-                    }
-                }
-            }
-            return null
-        }
         override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
             return activity?.let {
                 val builder = AlertDialog.Builder(it)
                 builder.setMessage("Une nouvelle version est disponible !")
                     .setPositiveButton("Télécharger la dernière version") { _, _ ->
-                        println("Téléchargement de la dernière version...")
                         downloadAndInstall()
+                        Toast.makeText(activity, "Le fichier d'installation de la dernière version est dans votre dossier de téléchargement", Toast.LENGTH_LONG).show()
                     }
                     .setNegativeButton("Annuler") { dialog, _ ->
                         dialog.cancel()

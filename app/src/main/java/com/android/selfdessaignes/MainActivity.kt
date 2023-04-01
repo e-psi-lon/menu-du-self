@@ -64,12 +64,9 @@ class MainActivity : AppCompatActivity() {
 
         }
         openMenuButton.setOnClickListener {
-            for (Views in listOf(menuTextView,menuCurrentState,menuListView,dayView,backButton,nextButton,openMenuButton)){
-                Views.visibility = View.GONE
-            }
-            switchToDinner.visibility = View.VISIBLE
-            appVersion.visibility = View.VISIBLE
-            appVersion.text = getString(R.string.version)+" "+appVersionName
+            //switchToDinner.visibility = View.VISIBLE
+            //appVersion.visibility = View.VISIBLE
+            //appVersion.text = getString(R.string.version)+" "+appVersionName
         }
 
     }
@@ -102,8 +99,19 @@ class MainActivity : AppCompatActivity() {
                 val cells = row.select("td")
                 if (cells.size == 2) {
                     val plat = cells[cell].text()
-                    menuList.add(plat)
+                    if ("<" in plat) {
+                        println(plat)
+                        val platSplit = plat.split("<")
+                        menuList.add(platSplit[0])
+                    }
+                    else if (plat=="" || plat==" ") {
+                        continue
+                    }
+                    else {
+                        menuList.add(plat)
+                    }
                 }
+
             }
             withContext(Dispatchers.Main) {
                 runOnUiThread {
@@ -136,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                 getMenu(1,0)
             }
             "Vendredi" -> {
-                getMenu(1,0)
+                getMenu(1,1)
             }
             else -> {
                 withContext(Dispatchers.Main) {

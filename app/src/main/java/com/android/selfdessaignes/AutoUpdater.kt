@@ -1,6 +1,7 @@
 package com.android.selfdessaignes
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 //import android.app.PendingIntent
@@ -21,7 +22,7 @@ import java.util.zip.ZipInputStream
 
 class AutoUpdater {
     class GithubDialogFragment : DialogFragment() {
-        private fun downloadAndInstall() = CoroutineScope(Dispatchers.IO).launch {
+        private fun downloadAndInstall(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
             var client = OkHttpClient()
             var request = Request.Builder()
                 .url("https://api.github.com/repos/e-psi-lon/menu-du-self/actions/artifacts?per_page=10")
@@ -31,25 +32,42 @@ class AutoUpdater {
             val jsonArray = json?.let { JSONObject(it) }
             val jsonObject = jsonArray?.getJSONArray("artifacts")
             val downloadUrl = jsonObject?.getJSONObject(0)?.get("archive_download_url")
-            val token = "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"
-            val request2 = Request.Builder()
-                .url(downloadUrl.toString())
-                .header("Authorization", "Bearer $token")
-                .header("accept", "application/vnd.github.v3+json")
-                .build()
-            val response2 = client.newCall(request2).execute()
-            val url = response2.request.url.toString()
-            client = OkHttpClient()
-            request = Request.Builder()
-                .url(url)
-                .build()
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            try {
+                val token = BuildConfig.TOKEN_ACCESS_ACTION
+                val request2 = Request.Builder()
+                    .url(downloadUrl.toString())
+                    .header("Authorization", "Bearer $token")
+                    .header("accept", "application/vnd.github.v3+json")
+                    .build()
+                val response2 = client.newCall(request2).execute()
+                val url = response2.request.url.toString()
+                client = OkHttpClient()
+                request = Request.Builder()
+                    .url(url)
+                    .build()
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                val tempFile = File.createTempFile("latest-version", ".zip")
-                response.body?.bytes()?.let { tempFile.writeBytes(it) }
-                installApkFromZip(tempFile)
+                    val tempFile = File.createTempFile("latest-version", ".zip")
+                    response.body?.bytes()?.let { tempFile.writeBytes(it) }
+                    installApkFromZip(tempFile)
+                }
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(activity, "Le fichier de la dernière version se situe dans le dossier Download du téléphone", Toast.LENGTH_LONG).show()
+                }
             }
+            catch (Exception: IOException) {
+                withContext(Dispatchers.Main) {
+                    val strError = "Error: ${Exception.message}"
+                    println(strError)
+                    Toast.makeText(
+                        activity,
+                        "Une erreur est survenue lors du téléchargement de la dernière version",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
         }
         @SuppressLint("UnspecifiedImmutableFlag")
         private fun installApkFromZip(zipFile: File) {
@@ -102,8 +120,8 @@ class AutoUpdater {
                 val builder = AlertDialog.Builder(it)
                 builder.setMessage("Une nouvelle version est disponible !")
                     .setPositiveButton("Télécharger la dernière version") { _, _ ->
-                        downloadAndInstall()
-                        Toast.makeText(activity, "Le fichier d'installation de la dernière version est dans votre dossier de téléchargement", Toast.LENGTH_LONG).show()
+                        downloadAndInstall(activity as Activity)
+
                     }
                     .setNegativeButton("Annuler") { dialog, _ ->
                         dialog.cancel()

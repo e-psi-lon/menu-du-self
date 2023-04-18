@@ -25,7 +25,7 @@ class AutoUpdater {
         private fun downloadAndInstall(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
             var client = OkHttpClient()
             var request = Request.Builder()
-                .url("https://api.github.com/repos/e-psi-lon/menu-du-self/actions/artifacts?per_page=10")
+                .url("https://api.github.com/repos/e-psi-lon/menu-du-self/actions/artifacts?per_page=2")
                 .build()
             val response1 = client.newCall(request).execute()
             val json = response1.body?.string()

@@ -22,36 +22,13 @@ import java.util.zip.ZipInputStream
 
 class AutoUpdater {
     class GithubDialogFragment : DialogFragment() {
-        private fun downloadAndInstall(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
-            var client = OkHttpClient()
-            var request = Request.Builder()
-                .url("https://api.github.com/repos/e-psi-lon/menu-du-self/actions/artifacts?per_page=2")
-                .build()
-            val response1 = client.newCall(request).execute()
-            val json = response1.body?.string()
-            val jsonArray = json?.let { JSONObject(it) }
-            val jsonObject = jsonArray?.getJSONArray("artifacts")
-            val downloadUrl = jsonObject?.getJSONObject(0)?.get("archive_download_url")
-            try {
-                val token = BuildConfig.TOKEN_ACCESS_ACTION
-                val request2 = Request.Builder()
-                    .url(downloadUrl.toString())
-                    .header("Authorization", "Bearer $token")
-                    .header("accept", "application/vnd.github.v3+json")
-                    .build()
-                val response2 = client.newCall(request2).execute()
-                val url = response2.request.url.toString()
-                client = OkHttpClient()
-                request = Request.Builder()
-                    .url(url)
-                    .build()
-                client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+        private fun checkUpdate(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
+            
+        }
 
-                    val tempFile = File.createTempFile("latest-version", ".zip")
-                    response.body?.bytes()?.let { tempFile.writeBytes(it) }
-                    installApkFromZip(tempFile)
-                }
+        private fun download(activity: Activity) = CoroutineScope(Dispatchers.IO).launch {
+            try {
+                unzipApp(File(activity.filesDir, "latest-version.zip"))
                 withContext(Dispatchers.Main) {
                     Toast.makeText(activity, "Le fichier de la dernière version se situe dans le dossier Download du téléphone", Toast.LENGTH_LONG).show()
                 }
@@ -69,32 +46,8 @@ class AutoUpdater {
             }
 
         }
-        @SuppressLint("UnspecifiedImmutableFlag")
-        private fun installApkFromZip(zipFile: File) {
-            //val packageInstaller = requireContext().packageManager?.packageInstaller
-            //val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
-            //val sessionId = packageInstaller?.createSession(params)
-            //val session = sessionId?.let { packageInstaller.openSession(it) }
-            //val out = session?.openWrite("apk", 0, -1)
-            /*val file =*/ unzipApp(zipFile)
-            //val ins = FileInputStream(file)
-            //out?.let { ins.copyTo(it) }
-            //out?.let { session.fsync(it) }
-            //ins.close()
-            //out?.close()
-            //if (activity != null) {
-            //    val intent = Intent(activity, MainActivity::class.java)
-            //    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            //    val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-            //    val statusReceiver = pendingIntent.intentSender
-            //    session?.commit(statusReceiver)
-            //}
-            //session?.close()
-            //file.delete()
-        }
 
-        private fun unzipApp(zipFile: File)/*: File*/ {
-            //val apkFile = File.createTempFile("latest-version", ".apk")
+        private fun unzipApp(zipFile: File) {
             val apkFile = File("/storage/emulated/0/Download", "latest-version-${getLastCommitHash()}.apk")
             println(apkFile.absolutePath)
             zipFile.inputStream().use { inputStream ->
@@ -111,7 +64,6 @@ class AutoUpdater {
                 }
             }
             zipFile.delete()
-            //return apkFile
 
         }
 
@@ -120,7 +72,7 @@ class AutoUpdater {
                 val builder = AlertDialog.Builder(it)
                 builder.setMessage("Une nouvelle version est disponible !")
                     .setPositiveButton("Télécharger la dernière version") { _, _ ->
-                        downloadAndInstall(activity as Activity)
+                        download(activity as Activity)
 
                     }
                     .setNegativeButton("Annuler") { dialog, _ ->

@@ -14,8 +14,7 @@ jobs:
     steps:
     - name: Launch python script to add values to the environment variables
       run: |
-        ls -la
-        sudo apt-get install python3
+        ls
         python3 script.py
     - uses: actions/checkout@v3
     - name: set up JDK 17

@@ -1,14 +1,17 @@
 import os
 import re
-import aiohttp
+import requests
 import asyncio
 
 
 
 async def get_latest_release():
-    async with aiohttp.ClientSession() as session:
-        async with session.get('https://api.github.com/repos/e-psi-lon/menu-du-self/releases/latest') as response:
-            return await response.json()
+    url = 'https://api.github.com/repos/e-psi-lon/menu-du-self/releases/latest'
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
 def get_version_name():
     path = os.path.join(os.getcwd(), 'app/build.gradle')     
@@ -26,7 +29,7 @@ def get_data_from_git():
     return diff, actual_hash
 
 async def main():
-    latest_release = await get_latest_release()
+    latest_release = await get_latest_release() if await get_latest_release() is not None else {'tag_name': '0.0.0'}
     os.environ['LATEST_TAG'] = latest_release['tag_name']
     os.environ['CHANGELOG'], os.environ['LAST_COMMIT_HASH'] = get_data_from_git()
     os.environ['VERSION_NAME'] = get_version_name()

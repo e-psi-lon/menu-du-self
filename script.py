@@ -39,7 +39,7 @@ async def main():
     print(f'"{"LATEST_TAG"}={latest_tag}" >> $GITHUB_OUTPUT')
     print(f'"{"VERSION_NAME"}="{get_version_name()}"" >> $GITHUB_OUTPUT')
     print(f'"{"CHANGELOG"}={get_data_from_git()[0]}" >> $GITHUB_OUTPUT')
-    print(f'"{"LAST_COMMIT_HASH"}={get_data_from_git[1]}" >> $GITHUB_OUTPUT')
+    print(f'"{"LAST_COMMIT_HASH"}={get_data_from_git()[1]}" >> $GITHUB_OUTPUT')
     print(get_data_from_git()[0])
 
 if __name__ == '__main__':

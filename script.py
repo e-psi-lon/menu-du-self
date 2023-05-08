@@ -3,8 +3,6 @@ import re
 import requests
 import asyncio
 
-
-
 async def get_latest_release():
     url = 'https://api.github.com/repos/e-psi-lon/menu-du-self/releases/latest'
     response = requests.get(url)
@@ -30,10 +28,12 @@ def get_data_from_git():
 
 async def main():
     latest_release = await get_latest_release() if await get_latest_release() is not None else {'tag_name': '0.0.0'}
-    os.environ['LATEST_TAG'] = latest_release['tag_name']
-    os.environ['CHANGELOG'], os.environ['LAST_COMMIT_HASH'] = get_data_from_git()
-    os.environ['VERSION_NAME'] = get_version_name()
-    print(os.environ['CHANGELOG'] + '\n' + os.environ['LATEST_TAG'] + '\n' + os.environ['VERSION_NAME'] + '\n' + os.environ['LAST_COMMIT_HASH'])
+    # executer la commande qui met les valeurs dans les outputs de l'étape de l'action github
+    print(f'::set-output name=LATEST_TAG::{latest_release["tag_name"]}')
+    print(f'::set-output name=VERSION_NAME::{get_version_name()}')
+    diff, actual_hash = get_data_from_git()
+    print(f'::set-output name=CHANGELOG::{diff}')
+    print(f'::set-output name=LAST_COMMIT_HASH::{actual_hash}')
 
 if __name__ == '__main__':
     asyncio.run(main())

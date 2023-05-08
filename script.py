@@ -27,13 +27,20 @@ def get_data_from_git():
     return diff, actual_hash
 
 async def main():
-    latest_release = await get_latest_release() if await get_latest_release() is not None else {'tag_name': '0.5'}
-    latest_tag = latest_release['tag_name']
+    lastest_release = await get_latest_release()
+    if lastest_release is None:
+        latest_tag = '0.5'
+    else:
+        latest_tag = lastest_release['tag_name']
+    print(f'::set-output name=latest_tag::{latest_tag}')
+    print(f'::set-output name=versionName::{get_version_name()}')
+    print(f'::set-output name=diff::{get_data_from_git()[0]}')
+    print(f'::set-output name=actual_hash::{get_data_from_git()[1]}')
     print(f'"{"LATEST_TAG"}={latest_tag}" >> $GITHUB_OUTPUT')
     print(f'"{"VERSION_NAME"}="{get_version_name()}"" >> $GITHUB_OUTPUT')
-    diff, actual_hash = get_data_from_git()
-    print(f'"{"CHANGELOG"}={diff}" >> $GITHUB_OUTPUT')
-    print(f'"{"LAST_COMMIT_HASH"}={actual_hash}" >> $GITHUB_OUTPUT')
+    print(f'"{"CHANGELOG"}={get_data_from_git()[0]}" >> $GITHUB_OUTPUT')
+    print(f'"{"LAST_COMMIT_HASH"}={get_data_from_git[1]}" >> $GITHUB_OUTPUT')
+    print(get_data_from_git()[0])
 
 if __name__ == '__main__':
     asyncio.run(main())

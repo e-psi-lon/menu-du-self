@@ -1,4 +1,4 @@
-name: Android CI
+name: Build and Release
 
 on:
   push:
@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GPLAY_KEYSTORE_PASSWORD: ${{ secrets.GPLAY_KEYSTORE_PASSWORD }}
+      GITHUB_TOKEN: ${{ secrets.TOKEN }}
     steps:
     - uses: actions/checkout@v3
     - name: Launch python script to add values to the environment variables
@@ -34,18 +35,23 @@ jobs:
       uses: dev-drprasad/delete-tag-and-release@v0.2.1
       with:
         tag_name: ${{ env.LAST_TAG }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
         delete_release: true
 
-    - name: Create release and upload APK
+    - name: Create release
+      id: create_release
       uses: actions/create-release@v1
       with:
-        artifacts: app/build/outputs/apk/release/app-release.apk
+        commitish: ${{ env.LAST_COMMIT_HASH }}
         body: |
           ## Changelog
           ${{ env.CHANGELOG }}
-        make_latest: true
-        name: ${{ env.VERSION_NAME }} (build ${{ env.LAST_COMMIT_HASH }})
+        release_name: ${{ env.VERSION_NAME }} (build ${{ env.LAST_COMMIT_HASH }})
         tag_name: ${{ env.TAG_NAME }}
-        token: ${{ secrets.TOKEN }}
-        
+    - name: Upload APK
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: app/build/outputs/apk/release/app-release.apk
+        asset_name: app.apk
+        asset_content_type: application/vnd.android.package-archive
+      

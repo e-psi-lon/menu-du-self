@@ -1,4 +1,4 @@
-package com.android.selfdessaignes
+package fr.e_psi_lon.selfdessaignes
 
 import org.junit.Test
 

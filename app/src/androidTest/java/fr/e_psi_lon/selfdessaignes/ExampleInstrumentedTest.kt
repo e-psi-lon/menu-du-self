@@ -1,4 +1,4 @@
-package com.android.selfdessaignes
+package fr.e_psi_lon.selfdessaignes
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

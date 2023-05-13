@@ -1,6 +1,5 @@
-package com.android.selfdessaignes
+package fr.e_psi_lon.selfdessaignes
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
@@ -14,7 +13,6 @@ import kotlinx.coroutines.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
-import org.json.JSONObject
 import java.io.File
 //import java.io.FileInputStream
 import java.io.IOException

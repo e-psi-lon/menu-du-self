@@ -13,11 +13,11 @@ def getGitCommitHash() {
 
 
 android {
-    namespace 'com.android.selfdessaignes'
+    namespace 'fr.e_psi_lon.selfdessaignes'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.android.selfdessaignes"
+        applicationId "fr.e_psi_lon.selfdessaignes"
         minSdk 24
         targetSdk 33
         versionCode 7

@@ -49,6 +49,7 @@ jobs:
           ${{ steps.get-values.outputs.CHANGELOG }}
         release_name: ${{ steps.get-values.outputs.VERSION_NAME }} (build ${{ steps.get-values.outputs.LAST_COMMIT_HASH }})
         tag_name: ${{ steps.get-values.outputs.VERSION_NAME }}
+        continue-on-error: true
     - name: Upload APK
       uses: actions/upload-release-asset@v1
       with:

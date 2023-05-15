@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.e_psi_lon.selfdessaignes.R
 import kotlinx.coroutines.*
 import org.jsoup.Jsoup
 import java.io.IOException
